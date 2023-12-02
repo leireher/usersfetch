@@ -55,13 +55,13 @@ let insertUser = (user) => {
 
   // Create a new row and set its innerHTML based on the user data
   var newRow = tableBody.insertRow();
-  newRow.setAttribute("id", user.id);
+  newRow.setAttribute("id", user._id);
   newRow.innerHTML = `
-                <th scope="row">${user.id}</th>
+                <th scope="row">${user._id}</th>
                 <td>${user.izena}</td>
                 <td>${user.abizena}</td>
                 <td>${user.email}</td>
-                <td><a onclick="deleteUser('${user.id}')">[x]</a> <a onclick="editUser('${user.id}')">[e]</a>  </td>
+                <td><a onclick="deleteUser('${user._id}')">[x]</a> <a onclick="editUser('${user._id}')">[e]</a>  </td>
             `;
 };
 
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let user = {
         izena: e.target.izena.value,
         abizena: e.target.abizena.value,
-        id: Date.now(),
+        id: e.target._id.value,
         email: e.target.email.value
     }
 

@@ -85,14 +85,13 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("formularioa").addEventListener("submit", (e) => {
     e.preventDefault();
     
-    let user = {
+    var user = {
         izena: e.target.izena.value,
         abizena: e.target.abizena.value,
-        id: e.target._id.value,
         email: e.target.email.value
     }
 
-    insertUser(user);
+    
 
     fetch("/users/new", {
       method: "POST",
@@ -103,7 +102,9 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // handle the response data or action
+        console.log(data); 
+        //user.id = data._id;
+        insertUser(data);
       })
       .catch((error) => {
         console.error("Error:", error);

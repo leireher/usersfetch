@@ -39,7 +39,7 @@ router.post("/new", (req, res) => {
     else {
       console.log(docs)
       users.push(docs);
-      res.json(users);
+      res.json(docs);
     }
   })  
   

@@ -1,33 +1,36 @@
 let updateUser = (id) => {
-    let row = document.getElementById(id);
-    let izena = row.children[1].children[0].value;
-    let abizena = row.children[2].children[0].value;
-    let email = row.children[3].children[0].value;
-    row.innerHTML = `
-    <th scope="row">${id}</th>
-    <td>${izena}</td>
-    <td>${abizena}</td>
-    <td>${email}</td>
-    <td> <a onclick="deleteUser('${id}')">[x]</a> <a onclick="editUser('${id}')">[e]</a>  </td>
-    `;
+  let row = document.getElementById(id);
+  let izena = row.children[2].children[0].value;
+  let abizena = row.children[3].children[0].value;
+  let email = row.children[4].children[0].value;
+  
+  let formData = new FormData();
 
-    let user = {
-        izena: izena,
-        abizena: abizena,
-        id: id,
-        email: email
-    }
+  formData.append("izena", izena);
+  formData.append("abizena", abizena);
+  formData.append("_id", id);
+  formData.append("email", email);
+  formData.append("avatar", row.children[1].children[0].files[0]);
+  
+  row.innerHTML = `
+  <th scope="row">${id}</th>
+  <td><img id="avat" class="rounded-circle" src="" width="50" height="50"/></td>
+  <td>${izena}</td>
+  <td>${abizena}</td>
+  <td>${email}</td>
+  <td> <a onclick="deleteUser('${id}')">[x]</a> <a onclick="editUser('${id}')">[e]</a></td>
+  `;
 
     fetch(`/users/update/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);  // handle the response data or action
+      console.log(data);
+      let img = document.getElementById("avat");
+      img.src = data.avatar;
+      img.removeAttribute("id");
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -36,11 +39,12 @@ let updateUser = (id) => {
 
 let editUser = (id) => {
     let row = document.getElementById(id);
-    let izena = row.children[1].innerHTML;
-    let abizena = row.children[2].innerHTML;
-    let email = row.children[3].innerHTML;
+    let izena = row.children[2].innerHTML;
+    let abizena = row.children[3].innerHTML;
+    let email = row.children[4].innerHTML;
     row.innerHTML = `
     <th scope="row">${id}</th>
+    <td><input type="file" id="avatar2" ></td>
     <td><input type="text" id="izena" value="${izena}"></td>
     <td><input type="text" id="abizena" value="${abizena}"></td>
     <td><input type="text" id="email" value="${email}"></td>
@@ -56,8 +60,10 @@ let insertUser = (user) => {
   // Create a new row and set its innerHTML based on the user data
   var newRow = tableBody.insertRow();
   newRow.setAttribute("id", user._id);
+
   newRow.innerHTML = `
                 <th scope="row">${user._id}</th>
+                <img src="${user.avatar}" class="rounded-circle" width="50" height="50">
                 <td>${user.izena}</td>
                 <td>${user.abizena}</td>
                 <td>${user.email}</td>
@@ -85,22 +91,17 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("formularioa").addEventListener("submit", (e) => {
     e.preventDefault();
     
-    var user = {
-        izena: e.target.izena.value,
-        abizena: e.target.abizena.value,
-        email: e.target.email.value
-    }
+    const form = document.getElementById('formularioa');
+    const formData = new FormData(form);
+    console.log(formData)
 
-    
+    console.log(formData)
 
     fetch("/users/new", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
+      body: formData,
     })
-      .then((response) => response.json())
+    .then((response) => response.json())
       .then((data) => {
         console.log(data); 
         //user.id = data._id;

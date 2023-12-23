@@ -14,7 +14,7 @@ let updateUser = (id) => {
   
   row.innerHTML = `
   <th scope="row">${id}</th>
-  <td><img id="avat" src="" width="50" height="50"/></td>
+  <td><img id="avat" class="rounded-circle" src="" width="50" height="50"/></td>
   <td>${izena}</td>
   <td>${abizena}</td>
   <td>${email}</td>
